@@ -1,0 +1,6 @@
+void kernelmain(void) 
+{
+    for (;;) {
+
+    }
+}
