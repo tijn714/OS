@@ -1,6 +1,9 @@
 # OS
 start of my OS development journey.
 
+# ChangeLog:
+- v1 (Current): Basic kernel that does nothing, startpoint of the learning progress. 
+
 # Requirements:
 - i686-elf-toolchains
 - grub dev toolchain
