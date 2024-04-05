@@ -1,6 +1,9 @@
-AS=i686-elf-as
-CC=i686-elf-gcc
-LD=i686-elf-ld
+
+ARCH=i386
+
+AS=$(ARCH)-elf-as
+CC=$(ARCH)-elf-gcc
+LD=$(ARCH)-elf-ld
 ASFLAGS=
 TARGET=OS
 CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra
@@ -17,6 +20,15 @@ check_for_tools:
 	@which grub-file > /dev/null || (echo "Error: grub-file not found" && exit 1)
 	@which grub-mkrescue > /dev/null || (echo "Error: grub-mkrescue not found" && exit 1)
 	@printf "[=] Done! \n"
+
+kernel:
+	# for people who dont have grub installed
+	@printf "[+] Building kernel... (without GRUB)\n"
+	@$(AS) $(ASFLAGS) src/multiboot.s -o $(BUILD_DIR)/multiboot.o
+	@$(CC) -c src/kernel.c -o $(BUILD_DIR)/kernel.o $(CFLAGS) $(CINCLUDE)
+	@$(CC) -T link.ld -o $(BUILD_DIR)/$(TARGET).bin $(LDFLAGS) $(BUILD_DIR)/multiboot.o $(BUILD_DIR)/kernel.o
+	@printf "[=] Done! \n"
+	@printf "Kernel is located at: $(BUILD_DIR)/$(TARGET).bin, you can run it with make run-kernel \n"
 
 iso:
 	@make check_for_tools
@@ -63,4 +75,8 @@ clean:
 
 run:
 	@printf "[+] Running $(TARGET).iso in qemu... \n"
-	@qemu-system-i386 -cdrom $(BUILD_DIR)/$(TARGET).iso
+	@qemu-system-i386 -cdrom $(BUILD_DIR)/$(TARGET).iso -d cpu_reset -monitor stdio
+
+run-kernel:
+	@printf "[+] Running kernel $(TARGET).bin in qemu... \n"
+	@qemu-system-i386 -kernel $(BUILD_DIR)/$(TARGET).bin -d cpu_reset -monitor stdio
