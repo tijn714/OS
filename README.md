@@ -13,9 +13,10 @@ Welcome to my OS development journey! This project is an exploration into the in
 
 To build and run the OS, you'll need the following tools installed:
 
-- `i686-elf-toolchain`
+- `i686-elf-gcc`
+- `nasm`
 - `make`
-- QEMU (to run the ISO image)
+- QEMU
 
 ## Building and Running
 
