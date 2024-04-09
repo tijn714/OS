@@ -13,8 +13,7 @@ Welcome to my OS development journey! This project is an exploration into the in
 
 To build and run the OS, you'll need the following tools installed:
 
-- `i386-elf-toolchain` or `i686-elf-toolchain`. You can modify the ```ARCH``` Flag in the makefile. Current is ```i386```.
-- GRUB development toolchain (Only for iso disk and bootloader)
+- `i686-elf-toolchain`
 - `make`
 - QEMU (to run the ISO image)
 
@@ -27,21 +26,8 @@ make iso
 
 To emulate the ISO with QEMU, use:
 ```bash
-make run
+qemu-system-x86_64 -cdrom OS.iso
 ```
-
-### You can also build the project without GRUB:
-
-To build the kernel:
-```bash
-make kernel
-```
-
-To emulate the kernel:
-```bash
-make run-kernel
-```
-
 
 ## License
 
