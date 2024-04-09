@@ -10,6 +10,4 @@ void kernelmain() {
     char *str = "Hello, World!";
     int len = strlen(str);
     vga_print(" String: %s\n Length: %d\n", str, len);
-
-    outportb(0x64, 0xFE);
 }
