@@ -17,6 +17,7 @@ iso:
 	@$(CC) -c src/ports.c -o $(BUILD_DIR)/ports.o $(CFLAGS) $(INCLUDE)
 	@$(CC) -c src/memory.c -o $(BUILD_DIR)/memory.o $(CFLAGS) $(INCLUDE)
 	@$(CC) -c src/vga.c -o $(BUILD_DIR)/vga.o $(CFLAGS) $(INCLUDE)
+	@$(CC) -c src/keyboard.c -o $(BUILD_DIR)/keyboard.o $(CFLAGS) $(INCLUDE)
 
 	@$(CC) -T linker.ld -o 	$(BUILD_DIR)/$(TARGET).bin 	\
 							$(BUILD_DIR)/entry.o 	\
@@ -24,6 +25,7 @@ iso:
 							$(BUILD_DIR)/ports.o 	\
 							$(BUILD_DIR)/memory.o 	\
 							$(BUILD_DIR)/vga.o 		\
+							$(BUILD_DIR)/keyboard.o \
 							$(CFLAGS) -nostdlib
 
 	@mkdir -p isodir/boot/grub
