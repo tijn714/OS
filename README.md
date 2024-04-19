@@ -16,9 +16,16 @@ To build and run the OS, you'll need the following tools installed:
 - `i686-elf-gcc`
 - `nasm`
 - `make`
+- ```grub-mkrescue``` (to build the ISO image)
 - QEMU
 
 ## Building and Running
+
+To build the kernel use
+```
+make
+```
+
 
 To build the ISO image, use the following command:
 ```bash
