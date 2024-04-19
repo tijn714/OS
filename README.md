@@ -6,8 +6,7 @@ Welcome to my OS development journey! This project is an exploration into the in
 
 - **v3 (CURRENT)**
   - using better project structure
-  - Improved the VGA driver and gave the kprint function the same functionality as the printf works.
-  -      
+  - Improved the VGA driver and gave the kprint function the same functionality as the printf works.   
 - **v2**
   - Added support for CPU operations, VGA text mode, memory management.
 - **v1**
