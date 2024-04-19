@@ -4,8 +4,12 @@ Welcome to my OS development journey! This project is an exploration into the in
 
 ## ChangeLog
 
-- **v2 (Current)**
-  - Added support for CPU operations, VGA text mode, memory management, and time (still in development).
+- **v3 (CURRENT)**
+  - using better project structure
+  - Improved the VGA driver and gave the kprint function the same functionality as the printf works.
+  -      
+- **v2**
+  - Added support for CPU operations, VGA text mode, memory management.
 - **v1**
   - Basic kernel that serves as the starting point of the learning progress.
 
