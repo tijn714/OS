@@ -4,7 +4,9 @@ Welcome to my OS development journey! This project is an exploration into the in
 
 ## ChangeLog
 
-- **v3 (CURRENT)**
+- **v4 (CURRENT)**
+  - added IDT, GDT and ISR
+- **v3**
   - using better project structure
   - Improved the VGA driver and gave the kprint function the same functionality as the printf works.   
 - **v2**
