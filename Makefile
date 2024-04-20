@@ -29,8 +29,6 @@ default:
 	@printf "[= CC drivers/gdt.c =]\n"
 	@$(CC) -c drivers/gdt.c -o $(BUILD_DIR)/gdt.o $(CFLAGS)
 
-
-
 	@printf "[= CC src/kernel.c =]\n"
 	@$(CC) -c src/kernel.c -o $(BUILD_DIR)/kernel.o $(CFLAGS)
 

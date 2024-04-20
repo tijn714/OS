@@ -4,26 +4,11 @@
 #include "io.h"
 #include "idt.h"
 #include "gdt.h"
-#include "fat.h" // In Development
 
 void __cpuid(uint32_t type, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
     asm volatile("cpuid"
                 : "=a"(*eax), "=b"(*ebx), "=c"(*ecx), "=d"(*edx)
                 : "0"(type)); // put the type into eax
-}
-
-void print_memory_info(void) {
-    uint32_t eax, ebx, ecx, edx;
-    __cpuid(0x80000005, &eax, &ebx, &ecx, &edx);
-    kprint("L1 Cache: %d KB\n", (eax & 0xff) / 1024);
-    kprint("L2 Cache: %d KB\n", (eax >> 8 & 0xff) / 1024);
-    kprint("L3 Cache: %d KB\n", (eax >> 16 & 0xff) / 1024);
-}
-
-void print_ram_info(void) {
-    uint32_t eax, ebx, ecx, edx;
-    __cpuid(0x80000005, &eax, &ebx, &ecx, &edx);
-    kprint("RAM: %d GB\n", (ebx >> 8 & 0xff) / 1024);
 }
 
 void kmain(void) {
@@ -54,10 +39,4 @@ void kmain(void) {
     } else {
         kprint(" (32-bit) \n");
     }
-
-    // print memory info
-    print_memory_info();
-
-    // print ram info
-    print_ram_info();
 }
