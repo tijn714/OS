@@ -22,8 +22,14 @@ default:
 	@$(CC) -c drivers/vga.c -o $(BUILD_DIR)/vga.o $(CFLAGS)
 	@printf "[= CC drivers/mem.c =]\n"
 	@$(CC) -c drivers/mem.c -o $(BUILD_DIR)/mem.o $(CFLAGS)
-	@printf "[= CC drivers/time.c =]\n"
-	@$(CC) -c drivers/time.c -o $(BUILD_DIR)/time.o $(CFLAGS)
+	@printf "[= CC drivers/isr.c =]\n"
+	@$(CC) -c drivers/isr.c -o $(BUILD_DIR)/isr.o $(CFLAGS)
+	@printf "[= CC drivers/idt.c =]\n"
+	@$(CC) -c drivers/idt.c -o $(BUILD_DIR)/idt.o $(CFLAGS)
+	@printf "[= CC drivers/gdt.c =]\n"
+	@$(CC) -c drivers/gdt.c -o $(BUILD_DIR)/gdt.o $(CFLAGS)
+
+
 
 	@printf "[= CC src/kernel.c =]\n"
 	@$(CC) -c src/kernel.c -o $(BUILD_DIR)/kernel.o $(CFLAGS)
@@ -34,13 +40,14 @@ default:
 						$(BUILD_DIR)/io.o 		\
 						$(BUILD_DIR)/vga.o 		\
 						$(BUILD_DIR)/mem.o 		\
-						$(BUILD_DIR)/time.o 	\
+						$(BUILD_DIR)/isr.o 		\
+						$(BUILD_DIR)/idt.o 		\
+						$(BUILD_DIR)/gdt.o 		\
 						$(BUILD_DIR)/kernel.o 	\
 						-o $(BUILD_DIR)/$(TARGET).bin
 
 
 iso: 
-	@make default
 	@mkdir -p iso/boot/grub
 	@cp $(BUILD_DIR)/$(TARGET).bin iso/boot/$(TARGET).bin
 	@echo "set timeout=0" > iso/boot/grub/grub.cfg
@@ -60,3 +67,8 @@ clean:
 	@rm -rf $(BUILD_DIR)
 	@rm -rf iso
 	@rm -f $(TARGET).iso
+
+all:
+	@make clean
+	@make
+	@make iso

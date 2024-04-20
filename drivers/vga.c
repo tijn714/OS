@@ -119,32 +119,65 @@ void clear_screen(void) {
 }
 
 void print_ok(const char* data) {
+  terminal_setcolor(vga_entry_color(GREY, BLACK));
+  kprint(" [ ");
   terminal_setcolor(vga_entry_color(GREEN, BLACK));
-  kprint(" [OK] %s\n", data);
+  kprint("OK");
+  terminal_setcolor(vga_entry_color(GREY, BLACK));
+  kprint(" ] %s\n", data);
   terminal_setcolor(vga_entry_color(WHITE, BLACK));
 }
 
 void print_fail(const char* data) {
+  terminal_setcolor(vga_entry_color(GREY, BLACK));
+  kprint(" [ ");
   terminal_setcolor(vga_entry_color(RED, BLACK));
-  kprint(" [FAILED] %s\n", data);
+  kprint("FAILED");
+  terminal_setcolor(vga_entry_color(GREY, BLACK));
+  kprint(" ] %s\n", data);
   terminal_setcolor(vga_entry_color(WHITE, BLACK));
 }
 
 void print_info(const char* data) {
+  terminal_setcolor(vga_entry_color(GREY, BLACK));
+  kprint(" [ ");
   terminal_setcolor(vga_entry_color(BLUE, BLACK));
-  kprint(" [INFO] %s\n", data);
+  kprint("INFO");
+  terminal_setcolor(vga_entry_color(GREY, BLACK));
+  kprint(" ] %s\n", data);
   terminal_setcolor(vga_entry_color(WHITE, BLACK));
 }
 
 
 void loading_bar(const char* data, int current, int total) {
-  current++; // make the current value start from 1
-  int percentage = (current * 100) / total;
+  current++; // make the current value 
 
-  kprint("\r %s: %d of %d (%d%% complete)", data, current, total, percentage);
+  // make the percent value work without the int length being too long
+  int percent = (current * 100) / total;
 
-  if (current == total) {
-    kprint("\r %s: %d of %d (%d%% complete)\n", data, current, total, percentage);
+  // make the bar length 24
+  int bar_length = 24;
+
+  // make the bar
+  int progress = (current * bar_length) / total;
+
+  // use \r to make the loading bar overwrite itself
+  kprint("\r %d%% - ", percent);
+
+  // print the progress
+  for (int i = 0; i < progress; i++) {
+    kprint("%c", 0xDB);
   }
 
+  // print the remaining progress
+  for (int i = progress; i < bar_length; i++) {
+    kprint(" ");
+  }
+
+  // print the percent
+  kprint(" %s", data);
+
+  if (current == total) {
+    kprint(" - DONE!\n");
+  }
 }
