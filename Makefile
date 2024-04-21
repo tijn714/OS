@@ -29,6 +29,12 @@ default:
 	@printf "[= CC drivers/gdt.c =]\n"
 	@$(CC) -c drivers/gdt.c -o $(BUILD_DIR)/gdt.o $(CFLAGS)
 
+
+	@printf "[= CC security/aes.c =]\n"
+	@$(CC) -c security/aes.c -o $(BUILD_DIR)/aes.o $(CFLAGS)
+	@printf "[= CC security/base64.c =]\n"
+	@$(CC) -c security/base64.c -o $(BUILD_DIR)/base64.o $(CFLAGS)
+
 	@printf "[= CC src/kernel.c =]\n"
 	@$(CC) -c src/kernel.c -o $(BUILD_DIR)/kernel.o $(CFLAGS)
 
@@ -41,6 +47,8 @@ default:
 						$(BUILD_DIR)/isr.o 		\
 						$(BUILD_DIR)/idt.o 		\
 						$(BUILD_DIR)/gdt.o 		\
+						$(BUILD_DIR)/aes.o 		\
+						$(BUILD_DIR)/base64.o 	\
 						$(BUILD_DIR)/kernel.o 	\
 						-o $(BUILD_DIR)/$(TARGET).bin
 

@@ -9,6 +9,7 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 
 enum bool { false, true };
+typedef enum bool bool;
 
 typedef unsigned int size_t;
 

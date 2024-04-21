@@ -108,3 +108,12 @@ size_t strlen(const char *str) {
     }
     return len;
 }
+
+bool isEqual(uint8_t *a, uint8_t *b, int len) {
+  for (int i = 0; i < len; ++i) {
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
+}
