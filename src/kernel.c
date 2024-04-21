@@ -14,6 +14,7 @@ void __cpuid(uint32_t type, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_
 }
 
 void kmain(void) {
+    bool cancontinue = true;
     vga_init();
     idt_init();
     gdt_init();
@@ -23,8 +24,7 @@ void kmain(void) {
     uint32_t eax, ebx, ecx, edx;
     uint32_t type;
 
-    // set memory to 0
-    memset(brand, 0, 12);
+    memset((uint8_t *)brand, 0, sizeof(brand));
 
     // get vendor
     __cpuid(0x80000002, (uint32_t *)brand+0x0, (uint32_t *)brand+0x1, (uint32_t *)brand+0x2, (uint32_t *)brand+0x3);
@@ -90,5 +90,28 @@ void kmain(void) {
         print_ok(" AES test passed");
     } else {
         print_fail(" AES test failed!");
+        cancontinue = false;
     }
+
+    if (!cancontinue) {
+        print_fail("Tests failed, halting...");
+        for (;;) {
+            asm volatile("hlt");
+        }
+    }
+
+    kprint(" Welcome to OS! \n");
+    kprint(" OS - Copyright (c) Tijn Rodrigo 2024 - All Rights Reserved.\n");
+
+
+    long fast_goal = 10000;
+
+    for (int i = 0; i < fast_goal; i++) {
+        loading_bar("Sample loading bar", i, fast_goal);
+    }
+
+    print_ok(" Loading complete!");
+
+
+    for (;;) {}
 }

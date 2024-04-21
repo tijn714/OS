@@ -13,7 +13,6 @@ void upper(char *str);
 void lower(char *str);
 size_t strlen(const char *str);
 
-
 bool isEqual(uint8_t *a, uint8_t *b, int len);
 
 #endif // MEM_H

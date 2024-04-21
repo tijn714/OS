@@ -28,6 +28,11 @@ default:
 	@$(CC) -c drivers/idt.c -o $(BUILD_DIR)/idt.o $(CFLAGS)
 	@printf "[= CC drivers/gdt.c =]\n"
 	@$(CC) -c drivers/gdt.c -o $(BUILD_DIR)/gdt.o $(CFLAGS)
+	@printf "[= CC drivers/irq.c =]\n"
+	@$(CC) -c drivers/irq.c -o $(BUILD_DIR)/irq.o $(CFLAGS)
+	
+	@printf "[= CC drivers/keyboard.c =]\n"
+	@$(CC) -c drivers/keyboard.c -o $(BUILD_DIR)/keyboard.o $(CFLAGS)
 
 
 	@printf "[= CC security/aes.c =]\n"
@@ -47,6 +52,7 @@ default:
 						$(BUILD_DIR)/isr.o 		\
 						$(BUILD_DIR)/idt.o 		\
 						$(BUILD_DIR)/gdt.o 		\
+						$(BUILD_DIR)/keyboard.o \
 						$(BUILD_DIR)/aes.o 		\
 						$(BUILD_DIR)/base64.o 	\
 						$(BUILD_DIR)/kernel.o 	\

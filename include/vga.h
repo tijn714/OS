@@ -25,6 +25,9 @@ enum vga_color {
   WHITE,
 };
 
+#define COPYRIGHT_ICON 0xA9
+#define AT_ICON 0x40
+
 // Define VGA registers
 #define VGA_MISC_PORT           0x3C2
 #define VGA_SEQ_PORT            0x3C4
