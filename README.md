@@ -5,9 +5,9 @@ Welcome to my OS development journey! This project is an exploration into the in
 ## ChangeLog
 
 - **v4 (CURRENT)**
-  - added IDT, GDT and ISR
+  - added IDT, GDT, ISR, AES-256 and Base64.
 - **v3**
-  - using better project structure
+  - using better project structure.
   - Improved the VGA driver and gave the kprint function the same functionality as the printf works.   
 - **v2**
   - Added support for CPU operations, VGA text mode, memory management.
@@ -27,10 +27,10 @@ To build and run the OS, you'll need the following tools installed:
 ## Building and Running
 
 To build the kernel use
-```
+
+```bash
 make
 ```
-
 
 To build the ISO image, use the following command:
 ```bash
