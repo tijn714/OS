@@ -50,6 +50,7 @@ default:
 						$(BUILD_DIR)/vga.o 		\
 						$(BUILD_DIR)/mem.o 		\
 						$(BUILD_DIR)/isr.o 		\
+						$(BUILD_DIR)/irq.o 		\
 						$(BUILD_DIR)/idt.o 		\
 						$(BUILD_DIR)/gdt.o 		\
 						$(BUILD_DIR)/keyboard.o \

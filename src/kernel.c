@@ -4,6 +4,7 @@
 #include "io.h"
 #include "idt.h"
 #include "gdt.h"
+#include "keyboard.h"
 #include "aes.h"
 #include "base64.h"
 
@@ -18,7 +19,6 @@ void kmain(void) {
     vga_init();
     idt_init();
     gdt_init();
-
     print_info("Copyright (c) 2024 Tijn Rodrigo - All Rights Reserved.");
     uint32_t brand[12];
     uint32_t eax, ebx, ecx, edx;
@@ -43,10 +43,10 @@ void kmain(void) {
     }
 
     uint8_t in[16] = {
-        0xDB, 0xDB, 0xDB, 0xDB,
-        0xDB, 0xDB, 0xDB, 0xDB,
-        0xDB, 0xDB, 0xDB, 0xDB,
-        0xDB, 0xDB, 0xDB, 0xDB
+        0x54, 0x69, 0x6A, 0x6E,
+        0x20, 0x52, 0x6F, 0x64, 
+        0x72, 0x69, 0x67, 0x6F,
+        0x00, 0x00, 0x00, 0x00
     };
     
     uint8_t key[32] = {
@@ -94,24 +94,12 @@ void kmain(void) {
     }
 
     if (!cancontinue) {
-        print_fail("Tests failed, halting...");
+        print_fail("Due to a failed test, the system will now halt.");
         for (;;) {
             asm volatile("hlt");
         }
     }
 
-    kprint(" Welcome to OS! \n");
+    kprint(" Welcome to OS!\n");
     kprint(" OS - Copyright (c) Tijn Rodrigo 2024 - All Rights Reserved.\n");
-
-
-    long fast_goal = 10000;
-
-    for (int i = 0; i < fast_goal; i++) {
-        loading_bar("Sample loading bar", i, fast_goal);
-    }
-
-    print_ok(" Loading complete!");
-
-
-    for (;;) {}
 }
