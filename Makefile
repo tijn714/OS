@@ -15,6 +15,10 @@ default:
 	@mkdir -p $(BUILD_DIR)
 	@printf "[= AS src/entry.asm =]\n"
 	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/entry.o src/entry.asm
+	@printf "[= AS src/load_idt.asm =]\n"
+	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/load_idt.o src/load_idt.asm
+	@printf "[= AS src/load_gdt.asm =]\n"
+	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/load_gdt.o src/load_gdt.asm
 
 	@printf "[= CC drivers/io.c =]\n"
 	@$(CC) -c drivers/io.c  -o $(BUILD_DIR)/io.o $(CFLAGS)
@@ -46,6 +50,8 @@ default:
 
 	@printf "[= LD =]\n"
 	@$(LD) $(LDFLAGS) 	$(BUILD_DIR)/entry.o 	\
+						$(BUILD_DIR)/load_idt.o \
+						$(BUILD_DIR)/load_gdt.o \
 						$(BUILD_DIR)/io.o 		\
 						$(BUILD_DIR)/vga.o 		\
 						$(BUILD_DIR)/mem.o 		\

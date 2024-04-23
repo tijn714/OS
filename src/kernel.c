@@ -18,7 +18,7 @@ void kmain(void) {
     bool cancontinue = true;
     vga_init();
     idt_init();
-    gdt_init();
+    // gdt_init(); CAUSES A SYSTEM RESTART
     print_info("Copyright (c) 2024 Tijn Rodrigo - All Rights Reserved.");
     uint32_t brand[12];
     uint32_t eax, ebx, ecx, edx;

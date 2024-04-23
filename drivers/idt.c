@@ -4,9 +4,7 @@
 struct idt_entry idt_entries[256];
 struct idt_ptr idt_ptr;
 
-void idt_load() {
-    asm volatile("lidt %0" : : "m" (idt_ptr));
-}
+extern void idt_load(); // defined in load_idt.asm
 
 void idt_init() {
     idt_ptr.limit = sizeof(struct idt_entry) * 256 - 1;

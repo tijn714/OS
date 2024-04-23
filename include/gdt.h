@@ -30,7 +30,7 @@ extern struct gdt_ptr gdt_ptr;
 
 // Function prototypes
 void gdt_init();
-void gdt_load();
+extern void gdt_load(); // defined in load_gdt.asm
 void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
 
 

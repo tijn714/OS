@@ -28,7 +28,7 @@ extern struct idt_entry idt_entries[256];
 extern struct idt_ptr idt_ptr;
 
 // Function prototypes
-void idt_load();
+extern void idt_load();
 void idt_init();
 void idt_set_gate(uint8_t num, uint32_t base, uint16_t selector, uint8_t type);
 
