@@ -1,11 +1,10 @@
 CC=i686-elf-gcc
 AS=nasm
-LD=i686-elf-ld
 
 CINCLUDES=-I./include
 CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra $(CINCLUDES)
 ASFLAGS=-f elf32
-LDFLAGS=-T config/linker.ld -nostdlib --allow-multiple-definition
+LDFLAGS=-T config/linker.ld -nostdlib
 
 BUILD_DIR=bin
 
@@ -49,7 +48,7 @@ default:
 
 
 	@printf "[= LD =]\n"
-	@$(LD) $(LDFLAGS) 	$(BUILD_DIR)/entry.o 	\
+	@$(CC) $(LDFLAGS) 	$(BUILD_DIR)/entry.o 	\
 						$(BUILD_DIR)/load_idt.o \
 						$(BUILD_DIR)/load_gdt.o \
 						$(BUILD_DIR)/io.o 		\

@@ -1,42 +1,39 @@
 #include "gdt.h"
 
-// Define the GDT entry table and pointer
-struct gdt_entry gdt_entries[3];
-struct gdt_ptr gdt_ptr;
+GDT g_gdt[NO_GDT_DESCRIPTORS];
+GDT_PTR g_gdt_ptr;
 
-extern void gdt_load(); // defined in load_gdt.asm
+void gdt_set_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
+    GDT *this = &g_gdt[index];
 
-// Initialize the GDT
-void gdt_init() {
-    // Set up the GDT pointer and limit
-    gdt_ptr.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gdt_ptr.base = (uint32_t)&gdt_entries;
+    this->segment_limit = limit & 0xFFFF;
+    this->base_low = base & 0xFFFF;
+    this->base_middle = (base >> 16) & 0xFF;
+    this->access = access;
 
-    // Set up the null descriptor
-    gdt_set_gate(0, 0, 0, 0, 0);
+    this->granularity = (limit >> 16) & 0x0F;
+    this->granularity = this->granularity | (gran & 0xF0);
 
-    // Set up the code segment descriptor
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
-
-    // Set up the data segment descriptor
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
-
-    // Load the GDT
-    gdt_load();
+    this->base_high = (base >> 24 & 0xFF);
 }
 
-// Set up a GDT gate
-void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
-    // Set up the base address
-    gdt_entries[num].base_low = (base & 0xFFFF);
-    gdt_entries[num].base_middle = (base >> 16) & 0xFF;
-    gdt_entries[num].base_high = (base >> 24) & 0xFF;
+// initialize GDT
+void gdt_init() {
+    g_gdt_ptr.limit = sizeof(g_gdt) - 1;
+    g_gdt_ptr.base_address = (uint32_t)g_gdt;
 
-    // Set up the limit
-    gdt_entries[num].limit_low = (limit & 0xFFFF);
-    gdt_entries[num].granularity = (limit >> 16) & 0x0F;
+    // NULL segment
+    gdt_set_entry(0, 0, 0, 0, 0);
+    // code segment
+    gdt_set_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
+    // data segment
+    gdt_set_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
+    // user code segment
+    gdt_set_entry(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
+    // user data segment
+    gdt_set_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-    // Set up the granularity and access flags
-    gdt_entries[num].granularity |= gran & 0xF0;
-    gdt_entries[num].access = access;
+    gdt_load((uint32_t)&g_gdt_ptr);
+
+    print_ok("GDT initialized");
 }

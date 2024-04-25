@@ -4,34 +4,28 @@
 #include "types.h"
 #include "vga.h"
 
-#define NULL_SEGMENT 0
-#define CODE_SEGMENT 1
-#define DATA_SEGMENT 2
+#define NO_GDT_DESCRIPTORS     8
 
-// Define the structure of a GDT entry
-struct gdt_entry {
-    uint16_t limit_low;
-    uint16_t base_low;
-    uint8_t base_middle;
-    uint8_t access;
-    uint8_t granularity;
-    uint8_t base_high;
-} __attribute__((packed));
+typedef struct {
+    uint16_t segment_limit;  // segment limit first 0-15 bits
+    uint16_t base_low;       // base first 0-15 bits
+    uint8_t base_middle;     // base 16-23 bits
+    uint8_t access;          // access byte
+    uint8_t granularity;     // high 4 bits (flags) low 4 bits (limit 4 last bits)(limit is 20 bit wide)
+    uint8_t base_high;       // base 24-31 bits
+} __attribute__((packed)) GDT;
 
-// Define the structure of a GDT pointer
-struct gdt_ptr {
-    uint16_t limit;
-    uint32_t base;
-} __attribute__((packed));
+typedef struct {
+    uint16_t limit;       
+    uint32_t base_address; 
+} __attribute__((packed)) GDT_PTR;
 
-// Declare the GDT entry table and pointer
-extern struct gdt_entry gdt_entries[3];
-extern struct gdt_ptr gdt_ptr;
+// asm gdt functions, define in load_gdt.asm
+extern void gdt_load(uint32_t gdt_ptr);
 
-// Function prototypes
+void gdt_set_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
+
+// initialize GDT
 void gdt_init();
-extern void gdt_load(); // defined in load_gdt.asm
-void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
 
-
-#endif // GDT_H
+#endif

@@ -1,5 +1,14 @@
 #include "aes.h"
 
+uint8_t xtime(uint8_t x) { return (x << 1) ^ (((x >> 7) & 1) * 0x1b); }
+
+uint8_t multiply(uint8_t x, uint8_t y) {
+  return ((y & 1) * x) ^ ((y >> 1 & 1) * xtime(x)) ^
+         ((y >> 2 & 1) * xtime(xtime(x))) ^
+         ((y >> 3 & 1) * xtime(xtime(xtime(x)))) ^
+         ((y >> 4 & 1) * xtime(xtime(xtime(xtime(x)))));
+}
+
 void KeyExpansion(const uint8_t *Key, uint8_t *RoundKey) {
   unsigned i, k;
   uint8_t tempa[4]; // Used for the column/row operations
