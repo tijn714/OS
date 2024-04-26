@@ -18,52 +18,60 @@ default:
 	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/load_idt.o src/load_idt.asm
 	@printf "[= AS src/load_gdt.asm =]\n"
 	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/load_gdt.o src/load_gdt.asm
+	@printf "[= AS src/irq.asm =]\n"
+	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/irq.o src/irq.asm
+	@printf "[= AS src/exceptions.asm =]\n"
+	@$(AS) $(ASFLAGS) -o $(BUILD_DIR)/exceptions.o src/exceptions.asm
 
+
+	@printf "[= CC drivers/pic.c =]\n"
+	@$(CC) $(CFLAGS) -c drivers/pic.c -o $(BUILD_DIR)/pic.o
 	@printf "[= CC drivers/io.c =]\n"
-	@$(CC) -c drivers/io.c  -o $(BUILD_DIR)/io.o $(CFLAGS)
-	@printf "[= CC drivers/vga.c =]\n"
-	@$(CC) -c drivers/vga.c -o $(BUILD_DIR)/vga.o $(CFLAGS)
-	@printf "[= CC drivers/mem.c =]\n"
-	@$(CC) -c drivers/mem.c -o $(BUILD_DIR)/mem.o $(CFLAGS)
-	@printf "[= CC drivers/isr.c =]\n"
-	@$(CC) -c drivers/isr.c -o $(BUILD_DIR)/isr.o $(CFLAGS)
+	@$(CC) $(CFLAGS) -c drivers/io.c -o $(BUILD_DIR)/io.o
 	@printf "[= CC drivers/idt.c =]\n"
-	@$(CC) -c drivers/idt.c -o $(BUILD_DIR)/idt.o $(CFLAGS)
+	@$(CC) $(CFLAGS) -c drivers/idt.c -o $(BUILD_DIR)/idt.o
 	@printf "[= CC drivers/gdt.c =]\n"
-	@$(CC) -c drivers/gdt.c -o $(BUILD_DIR)/gdt.o $(CFLAGS)
-	@printf "[= CC drivers/irq.c =]\n"
-	@$(CC) -c drivers/irq.c -o $(BUILD_DIR)/irq.o $(CFLAGS)
-	
-	@printf "[= CC drivers/keyboard.c =]\n"
-	@$(CC) -c drivers/keyboard.c -o $(BUILD_DIR)/keyboard.o $(CFLAGS)
+	@$(CC) $(CFLAGS) -c drivers/gdt.c -o $(BUILD_DIR)/gdt.o 
+	@printf "[= CC drivers/isr.c =]\n"
+	@$(CC) $(CFLAGS) -c drivers/isr.c -o $(BUILD_DIR)/isr.o
+	@printf "[= CC drivers/mem.c =]\n"
+	@$(CC) $(CFLAGS) -c drivers/mem.c -o $(BUILD_DIR)/mem.o
+	@printf "[= CC drivers/vga.c =]\n"
+	@$(CC) $(CFLAGS) -c drivers/vga.c -o $(BUILD_DIR)/vga.o
 
 
 	@printf "[= CC security/aes.c =]\n"
-	@$(CC) -c security/aes.c -o $(BUILD_DIR)/aes.o $(CFLAGS)
+	@$(CC) $(CFLAGS) -c security/aes.c -o $(BUILD_DIR)/aes.o
 	@printf "[= CC security/base64.c =]\n"
-	@$(CC) -c security/base64.c -o $(BUILD_DIR)/base64.o $(CFLAGS)
+	@$(CC) $(CFLAGS) -c security/base64.c -o $(BUILD_DIR)/base64.o
+
 
 	@printf "[= CC src/kernel.c =]\n"
-	@$(CC) -c src/kernel.c -o $(BUILD_DIR)/kernel.o $(CFLAGS)
+	@$(CC) $(CFLAGS) -c src/kernel.c -o $(BUILD_DIR)/kernel.o
 
 
 	@printf "[= LD =]\n"
-	@$(CC) $(LDFLAGS) 	$(BUILD_DIR)/entry.o 	\
-						$(BUILD_DIR)/load_idt.o \
-						$(BUILD_DIR)/load_gdt.o \
-						$(BUILD_DIR)/io.o 		\
-						$(BUILD_DIR)/vga.o 		\
-						$(BUILD_DIR)/mem.o 		\
-						$(BUILD_DIR)/isr.o 		\
-						$(BUILD_DIR)/irq.o 		\
-						$(BUILD_DIR)/idt.o 		\
-						$(BUILD_DIR)/gdt.o 		\
-						$(BUILD_DIR)/keyboard.o \
-						$(BUILD_DIR)/aes.o 		\
-						$(BUILD_DIR)/base64.o 	\
-						$(BUILD_DIR)/kernel.o 	\
-						-o $(BUILD_DIR)/$(TARGET).bin
+	@$(CC) $(LDFLAGS)  			\
+	$(BUILD_DIR)/entry.o 		\
+	$(BUILD_DIR)/load_idt.o 	\
+	$(BUILD_DIR)/idt.o 			\
+	$(BUILD_DIR)/load_gdt.o 	\
+	$(BUILD_DIR)/gdt.o 			\
+	$(BUILD_DIR)/irq.o 			\
+	$(BUILD_DIR)/exceptions.o 	\
+	$(BUILD_DIR)/pic.o 			\
+	$(BUILD_DIR)/io.o 			\
+	$(BUILD_DIR)/isr.o 			\
+	$(BUILD_DIR)/mem.o 			\
+	$(BUILD_DIR)/vga.o 			\
+	$(BUILD_DIR)/aes.o 			\
+	$(BUILD_DIR)/base64.o 		\
+	$(BUILD_DIR)/kernel.o 		\
+	-o $(BUILD_DIR)/$(TARGET).bin
 
+
+
+	
 
 iso: 
 	@mkdir -p iso/boot/grub

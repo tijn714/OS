@@ -2,34 +2,30 @@
 #define IDT_H
 
 #include "types.h"
-#include "io.h"
 #include "isr.h"
-#include "mem.h"
+#include "pic.h"
 
-#include "vga.h"
+#define NO_IDT_DESCRIPTORS     256
 
-// Define the structure of an entry in the IDT
-struct idt_entry {
-    uint16_t base_low;
-    uint16_t segment_selector;
-    uint8_t zero;
-    uint8_t type;
-    uint16_t base_high;
-} __attribute__((packed));
+typedef struct {
+    uint16_t base_low;          // lower 16 bits 0-15 of the address to jump to when this interrupt fires
+    uint16_t segment_selector;  // code segment selector in GDT
+    uint8_t zero;               // unused, always be zero
+    uint8_t type;               // types trap, interrupt gates
+    uint16_t base_high;         // upper 16 bits 16-31 of the address to jump to
+} __attribute__((packed)) IDT;
 
-// Define the pointer to the IDT
-struct idt_ptr {
-    uint16_t limit;
-    uint32_t base;
-} __attribute__((packed));
+typedef struct {
+    uint16_t limit;         // limit size of all IDT segments
+    uint32_t base_address;  // base address of the first IDT segment
+} __attribute__((packed)) IDT_PTR;
 
-// Declare the IDT entry table and pointer
-extern struct idt_entry idt_entries[256];
-extern struct idt_ptr idt_ptr;
 
-// Function prototypes
-extern void idt_load();
+// asm gdt functions, define in load_idt.asm
+extern void load_idt(uint32_t idt_ptr);
+
+void idt_set_entry(int index, uint32_t base, uint16_t seg_sel, uint8_t flags);
+
 void idt_init();
-void idt_set_gate(uint8_t num, uint32_t base, uint16_t selector, uint8_t type);
 
-#endif // IDT_H
+#endif

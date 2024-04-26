@@ -2,7 +2,6 @@
 #define GDT_H
 
 #include "types.h"
-#include "vga.h"
 
 #define NO_GDT_DESCRIPTORS     8
 
@@ -16,16 +15,14 @@ typedef struct {
 } __attribute__((packed)) GDT;
 
 typedef struct {
-    uint16_t limit;       
-    uint32_t base_address; 
+    uint16_t limit;       // limit size of all GDT segments
+    uint32_t base_address;  // base address of the first GDT segment
 } __attribute__((packed)) GDT_PTR;
 
-// asm gdt functions, define in load_gdt.asm
-extern void gdt_load(uint32_t gdt_ptr);
+extern void load_gdt(uint32_t gdt_ptr);
 
 void gdt_set_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
 
-// initialize GDT
 void gdt_init();
 
 #endif

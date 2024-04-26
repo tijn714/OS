@@ -1,7 +1,7 @@
 section .text
     global gdt_load
 
-gdt_load:
+load_gdt:
     mov eax, [esp + 4]  ; get gdt pointer
     lgdt [eax]          ; load gdt
 

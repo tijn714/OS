@@ -4,7 +4,6 @@
 #include "io.h"
 #include "idt.h"
 #include "gdt.h"
-#include "keyboard.h"
 #include "aes.h"
 #include "base64.h"
 
@@ -16,9 +15,9 @@ void __cpuid(uint32_t type, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_
 
 void kmain(void) {
     bool cancontinue = true;
-    vga_init();
     idt_init();
     gdt_init();
+    vga_init();
     print_info("Copyright (c) 2024 Tijn Rodrigo - All Rights Reserved.");
     uint32_t brand[12];
     uint32_t eax, ebx, ecx, edx;

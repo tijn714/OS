@@ -1,7 +1,11 @@
+/**
+ * Global Descriptor Table(GDT) setup
+ */
 #include "gdt.h"
 
 GDT g_gdt[NO_GDT_DESCRIPTORS];
 GDT_PTR g_gdt_ptr;
+
 
 void gdt_set_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
     GDT *this = &g_gdt[index];
@@ -17,7 +21,6 @@ void gdt_set_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uin
     this->base_high = (base >> 24 & 0xFF);
 }
 
-// initialize GDT
 void gdt_init() {
     g_gdt_ptr.limit = sizeof(g_gdt) - 1;
     g_gdt_ptr.base_address = (uint32_t)g_gdt;
@@ -33,7 +36,5 @@ void gdt_init() {
     // user data segment
     gdt_set_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-    gdt_load((uint32_t)&g_gdt_ptr);
-
-    print_ok("GDT initialized");
+    load_gdt((uint32_t)&g_gdt_ptr);
 }
