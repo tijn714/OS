@@ -38,6 +38,8 @@ default:
 	@$(CC) $(CFLAGS) -c drivers/mem.c -o $(BUILD_DIR)/mem.o
 	@printf "[= CC drivers/vga.c =]\n"
 	@$(CC) $(CFLAGS) -c drivers/vga.c -o $(BUILD_DIR)/vga.o
+	@printf "[= CC drivers/time.c =]\n"
+	@$(CC) $(CFLAGS) -c drivers/time.c -o $(BUILD_DIR)/time.o
 
 
 	@printf "[= CC security/aes.c =]\n"
@@ -64,6 +66,7 @@ default:
 	$(BUILD_DIR)/isr.o 			\
 	$(BUILD_DIR)/mem.o 			\
 	$(BUILD_DIR)/vga.o 			\
+	$(BUILD_DIR)/time.o 		\
 	$(BUILD_DIR)/aes.o 			\
 	$(BUILD_DIR)/base64.o 		\
 	$(BUILD_DIR)/kernel.o 		\

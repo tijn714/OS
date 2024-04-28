@@ -1,0 +1,64 @@
+#include "time.h"
+
+// number of ticks since system booted
+uint32_t g_ticks = 0;
+// frequency in hertz
+uint16_t g_freq_hz = 0;
+// timer functions to be called when that ticks reached in irq handler
+TIMER_FUNCTION_MANAGER g_timer_function_manager;
+
+void timer_set_frequency(uint16_t f) {
+    g_freq_hz = f;
+    uint16_t divisor = TIMER_INPUT_CLOCK_FREQUENCY / f;
+    // set Mode 3 - Square Wave Mode
+    outb(TIMER_COMMAND_PORT, 0b00110110);
+    // set low byte
+    outb(TIMER_CHANNEL_0_DATA_PORT, divisor & 0xFF);
+    // set high byte
+    outb(TIMER_CHANNEL_0_DATA_PORT, (divisor >> 8) & 0xFF);
+}
+
+
+void timer_handler(REGISTERS* r) {
+    uint32_t i;
+    TIMER_FUNC_ARGS *args = NULL;
+    g_ticks++;
+    kprint(" timer triggered at frequency %d\n", g_ticks);
+    for (i = 0; i < MAXIMUM_TIMER_FUNCTIONS; i++) {
+        args = &g_timer_function_manager.func_args[i];
+        if (args->timeout == 0)
+            continue;
+        if ((g_ticks % args->timeout) == 0) {
+            g_timer_function_manager.functions[i](args);
+        }
+    }
+}
+
+void timer_register_function(TIMER_FUNCTION function, TIMER_FUNC_ARGS *args) {
+    uint32_t index = 0;
+    if (function == NULL || args == NULL) {
+        kprint(" ERROR: failed to register timer function %x\n", function);
+        return;
+    }
+    index = (++g_timer_function_manager.current_index) % MAXIMUM_TIMER_FUNCTIONS;
+    g_timer_function_manager.current_index = index;
+    g_timer_function_manager.functions[index] = function;
+    memcpy(&g_timer_function_manager.func_args[index], args, sizeof(TIMER_FUNC_ARGS));
+}
+
+void timer_init() {
+    // IRQ0 will fire 100 times per second
+    timer_set_frequency(100);
+    isr_register_interrupt_handler(IRQ_BASE, timer_handler);
+}
+
+void sleep(int sec) {
+    kprint(" sleeping for %d seconds\n", sec);
+    uint32_t end = g_ticks + sec * g_freq_hz;
+    while (g_ticks < end) {
+       // print how many seconds left
+         if (g_ticks % g_freq_hz == 0) {
+              kprint("\r %d seconds left.", (end - g_ticks) / g_freq_hz);
+         }
+    }
+}

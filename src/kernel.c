@@ -4,8 +4,19 @@
 #include "io.h"
 #include "idt.h"
 #include "gdt.h"
+#include "isr.h"
+#include "time.h"
 #include "aes.h"
 #include "base64.h"
+
+
+void shutdown_signal(void) {
+    outb(0xF4, 0x00);
+}
+
+void reboot_signal(void) {
+    outb(0x64, 0xFE);
+}
 
 void __cpuid(uint32_t type, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
     asm volatile("cpuid"
@@ -17,6 +28,7 @@ void kmain(void) {
     bool cancontinue = true;
     idt_init();
     gdt_init();
+    timer_init();
     vga_init();
     print_info("Copyright (c) 2024 Tijn Rodrigo - All Rights Reserved.");
     uint32_t brand[12];
@@ -93,12 +105,12 @@ void kmain(void) {
     }
 
     if (!cancontinue) {
-        print_fail("Due to a failed test, the system will now halt.");
+        print_fail(" one or more tests failed, halting...");
         for (;;) {
             asm volatile("hlt");
         }
     }
 
-    kprint(" Welcome to OS!\n");
-    kprint(" OS - Copyright (c) Tijn Rodrigo 2024 - All Rights Reserved.\n");
+    kprint(" [+] Welcome to OS!\n");
+    kprint(" [+] Type 'help' for a list of commands.\n");
 }
