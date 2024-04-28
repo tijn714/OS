@@ -1,5 +1,5 @@
 section .text
-    global gdt_load
+    global load_gdt
 
 load_gdt:
     mov eax, [esp + 4]  ; get gdt pointer

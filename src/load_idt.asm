@@ -1,5 +1,5 @@
 section .text
-    global idt_load
+    global load_idt
 
 load_idt:
     mov eax, [esp + 4]
