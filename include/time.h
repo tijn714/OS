@@ -13,27 +13,17 @@
 #define TIMER_CHANNEL_2_DATA_PORT    0x42
 #define TIMER_COMMAND_PORT    0x43
 
-typedef struct {
-    uint32_t timeout; // in millisecond, g_ticks in timer.c reaches there
-    void *user;
-} TIMER_FUNC_ARGS;
+// define timer_handler
+void timer_handler(REGISTERS *reg);
 
-typedef void (*TIMER_FUNCTION)(TIMER_FUNC_ARGS *);
+struct TimerBlock {
+    uint32_t ticks;
+    uint32_t countdown;
+};
 
-#define MAXIMUM_TIMER_FUNCTIONS    32
-
-typedef struct {
-    uint32_t current_index;
-    // timer functions to be called when that ticks reached in irq handler
-    TIMER_FUNCTION functions[MAXIMUM_TIMER_FUNCTIONS];
-    // arguments of each above timer functions
-    TIMER_FUNC_ARGS func_args[MAXIMUM_TIMER_FUNCTIONS];
-} TIMER_FUNCTION_MANAGER;
-
-
+void set_timer_frequency(uint32_t frequency);
 void timer_init();
-void sleep(int sec);
-
-void timer_register_function(TIMER_FUNCTION function, TIMER_FUNC_ARGS *args);
+void sleep(uint32_t delay);
+void set_date_time(uint8_t second, uint8_t minute, uint8_t hour, uint8_t day, uint8_t month, uint32_t year);
 
 #endif // TIME_H

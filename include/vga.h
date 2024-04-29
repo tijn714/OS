@@ -4,6 +4,7 @@
 #include "types.h"
 #include "io.h"
 #include "mem.h"
+#include "font.h"
 
 // VGA Colors
 enum vga_color {

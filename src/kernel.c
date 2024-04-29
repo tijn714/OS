@@ -113,4 +113,8 @@ void kmain(void) {
 
     kprint(" [+] Welcome to OS!\n");
     kprint(" [+] Type 'help' for a list of commands.\n");
+
+    sleep(1);
+
+    kprint(" Done waiting!\n");
 }
