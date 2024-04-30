@@ -2,7 +2,7 @@
 
 Welcome to my OS development journey! This project is an exploration into the intricate world of operating system development. Below you'll find information about the project, including its current status, requirements, and how to build and run the project. 
 
-### NOTE: STARTED FROM SCRATCH AGAIN!
+### NOTE: Things printed in the kernel are in Dutch!
 
 ## Requirements
 
