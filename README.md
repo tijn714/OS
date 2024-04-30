@@ -1,18 +1,8 @@
 # OS Development Journey
 
-Welcome to my OS development journey! This project is an exploration into the intricate world of operating system development. Below you'll find information about the project, including its current status, requirements, and how to build and run the project.
+Welcome to my OS development journey! This project is an exploration into the intricate world of operating system development. Below you'll find information about the project, including its current status, requirements, and how to build and run the project. 
 
-## ChangeLog
-
-- **v4 (CURRENT)**
-  - added IDT, GDT, ISR, AES-256 and Base64.
-- **v3**
-  - using better project structure.
-  - Improved the VGA driver and gave the kprint function the same functionality as the printf works.   
-- **v2**
-  - Added support for CPU operations, VGA text mode, memory management.
-- **v1**
-  - Basic kernel that serves as the starting point of the learning progress.
+### NOTE: STARTED FROM SCRATCH AGAIN!
 
 ## Requirements
 
