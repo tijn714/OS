@@ -191,5 +191,4 @@ static inline bool isequal(u8 *a, u8 *b, size_t size) {
     }
     return true;
 }
-
 #endif // UTIL_H

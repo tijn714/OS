@@ -23,6 +23,12 @@ void set_color(enum color fg, enum color bg) {
     u8 color = fg | bg << 4;
     outportb(0x3D4, 0x0F);
     outportb(0x3D5, color);
+
+    // zet de kleuren combinatie over het vollige scherm
+    for (size_t i = 0; i < SCREEN_SIZE; i++) {
+        u16 *vga = (u16 *)0xB8000;
+        vga[i] = (bg << 12) | (fg << 8) | (vga[i] & 0xFF);
+    }
 }
 
 void reset_color() {
@@ -32,8 +38,10 @@ void reset_color() {
 void clear_screen() { // Scherm leegmaken
     u16 *vga = (u16 *)0xB8000;
 
+    // Maak het scherm leeg met huidige kleuren
+    u8 color = current_fg | current_bg << 4;
     for (size_t i = 0; i < SCREEN_SIZE; i++) {
-        vga[i] = 0x0720;
+        vga[i] = (color << 8) | ' ';
     }
 }
 
@@ -107,8 +115,17 @@ void kprint(const char *str, ...) {
                     kputchar(*s, current_fg, current_bg);
                     s++;
                 }
+            }  else if (*str == 'c') {
+                char c = va_arg(args, int);
+                kputchar(c, current_fg, current_bg);
+            } else if (*str == '%') {
+                kputchar('%', current_fg, current_bg);
+            } else {
+                kputchar('%', current_fg, current_bg);
+                kputchar(*str, current_fg, current_bg);
             }
-        } else {
+        } 
+        else {
             kputchar(*str, current_fg, current_bg);
         }
         str++;
@@ -144,6 +161,14 @@ void kserial(enum color fg, enum color bg, const char *str, ...) {
                     kputchar(*s, fg, bg);
                     s++;
                 }
+            } else if (*str == 'c') {
+                char c = va_arg(args, int);
+                kputchar(c, fg, bg);
+            } else if (*str == '%') {
+                kputchar('%', fg, bg);
+            } else {
+                kputchar('%', fg, bg);
+                kputchar(*str, fg, bg);
             }
         } else {
             kputchar(*str, fg, bg);
