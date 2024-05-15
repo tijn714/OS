@@ -25,12 +25,7 @@ link:
 kernel:
 	$(CC) -c src/kernel.c -o $(BIN)/kernel.o $(CFLAGS)
 	$(CC) -c src/vga.c -o $(BIN)/vga.o $(CFLAGS)
-	$(CC) -c src/idt.c -o $(BIN)/idt.o $(CFLAGS)
-	$(CC) -c src/gdt.c -o $(BIN)/gdt.o $(CFLAGS)
-	$(CC) -c src/isrs.c -o $(BIN)/isrs.o $(CFLAGS)
-	$(CC) -c src/irq.c -o $(BIN)/irq.o $(CFLAGS)
-	$(CC) -c src/system.c -o $(BIN)/system.o $(CFLAGS)
-	$(CC) -c src/timer.c -o $(BIN)/timer.o $(CFLAGS)
+	$(CC) -c src/memory.c -o $(BIN)/memory.o $(CFLAGS)
 
 
 iso:
@@ -49,3 +44,6 @@ clean:
 	rm -rf $(BIN)
 	rm -rf *.bin
 	rm -rf *.iso
+
+run: bootstrap kernel link iso
+	qemu-system-i386 -cdrom $(TARGET).iso
