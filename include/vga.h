@@ -38,6 +38,8 @@ void vga_init();
 void set_color(enum color fg, enum color bg);
 void reset_color();
 
+void disable_cursor();
+
 void kputchar(char c, enum color fg, enum color bg);
 void kprint(const char *str, ...);
 void kserial(enum color fg, enum color bg, const char *str, ...);

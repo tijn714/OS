@@ -26,6 +26,11 @@ kernel:
 	$(CC) -c src/kernel.c -o $(BIN)/kernel.o $(CFLAGS)
 	$(CC) -c src/vga.c -o $(BIN)/vga.o $(CFLAGS)
 	$(CC) -c src/memory.c -o $(BIN)/memory.o $(CFLAGS)
+	$(CC) -c src/gdt.c -o $(BIN)/gdt.o $(CFLAGS)
+	$(CC) -c src/idt.c -o $(BIN)/idt.o $(CFLAGS)
+	$(CC) -c src/isr.c -o $(BIN)/isr.o $(CFLAGS)
+	$(CC) -c src/pic.c -o $(BIN)/pic.o $(CFLAGS)
+	$(CC) -c src/io_ports.c -o $(BIN)/io_ports.o $(CFLAGS)
 
 
 iso:

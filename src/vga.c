@@ -1,5 +1,6 @@
 #include "vga.h"
 #include "memory.h"
+#include "io_ports.h"
 #include <stdarg.h>
 
 // Globale variabelen voor de huidige tekstkleuren
@@ -38,6 +39,12 @@ void set_color(enum color fg, enum color bg) {
 void reset_color() {
     current_fg = WHITE;
     current_bg = BLACK;
+}
+
+
+void disable_cursor() {
+    outportb(0x3D4, 0x0A);
+    outportb(0x3D5, 0x20);
 }
 
 void kputchar(char c, enum color fg, enum color bg) {
