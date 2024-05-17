@@ -1,6 +1,7 @@
 #include "vga.h"
 #include "memory.h"
 #include "io_ports.h"
+#include "font.h"
 #include <stdarg.h>
 
 // Globale variabelen voor de huidige tekstkleuren
@@ -10,6 +11,17 @@ size_t vga_index = 0;
 size_t vga_row = 0;
 size_t vga_column = 0;
 volatile uint16_t* vga_buffer = (uint16_t*)VGA_MEMORY;
+
+// draw a font glyph with font[332][16]
+void draw_glyph(char c, enum color fg, enum color bg, int x, int y) {
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (font[c][i] & (1 << j)) {
+                vga_entry(' ', fg, bg, x + j, y + i);
+            }
+        }
+    }
+}
 
 void clear_screen() {
     for (size_t y = 0; y < SCREEN_HEIGHT; y++) {
@@ -27,7 +39,6 @@ void vga_entry(unsigned char c, enum color fg, enum color bg, int x, int y) {
 }
 
 void vga_init() {
-    set_color(WHITE, BLACK);
     clear_screen();
 }
 
@@ -47,6 +58,13 @@ void disable_cursor() {
     outportb(0x3D5, 0x20);
 }
 
+void enable_cursor() {
+    outportb(0x3D4, 0x0A);
+    outportb(0x3D5, (inportb(0x3D5) & 0xC0) | 0x0F);
+    outportb(0x3D4, 0x0B);
+    outportb(0x3D5, (inportb(0x3D5) & 0xE0) | 0x0F);
+}
+
 void kputchar(char c, enum color fg, enum color bg) {
     if (c == '\n') {
         vga_column = 0;
@@ -55,7 +73,7 @@ void kputchar(char c, enum color fg, enum color bg) {
         }
     } else if (c == '\t') {
         for (int i = 0; i < 4; i++) {
-            vga_entry(' ', fg, bg, vga_column, vga_row);
+            draw_glyph(' ', fg, bg, vga_column * 8, vga_row * 16);
             if (++vga_column == SCREEN_WIDTH) {
                 vga_column = 0;
                 if (++vga_row == SCREEN_HEIGHT) {
@@ -65,17 +83,17 @@ void kputchar(char c, enum color fg, enum color bg) {
         }
     } else if (c == '\b') {
         if (vga_column > 0) {
-            vga_entry(' ', fg, bg, vga_column, vga_row);
             vga_column--;
+            draw_glyph(' ', fg, bg, vga_column * 8, vga_row * 16);
         } else if (vga_row > 0) {
             vga_column = SCREEN_WIDTH - 1;
             vga_row--;
-            vga_entry(' ', fg, bg, vga_column, vga_row);
+            draw_glyph(' ', fg, bg, vga_column * 8, vga_row * 16);
         }
     } else if (c == '\r') {
         vga_column = 0;
     } else {
-        vga_entry(c, fg, bg, vga_column, vga_row);
+        draw_glyph(c, fg, bg, vga_column * 8, vga_row * 16);
         if (++vga_column == SCREEN_WIDTH) {
             vga_column = 0;
             if (++vga_row == SCREEN_HEIGHT) {

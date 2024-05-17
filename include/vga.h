@@ -22,14 +22,11 @@ enum color {
     WHITE
 };
 
-// Schermgrootte
 #define SCREEN_WIDTH 80
 #define SCREEN_HEIGHT 25
 #define SCREEN_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT)
 
-
-#define VGA_MEMORY 0xB8000
-
+#define VGA_MEMORY 0xB8000 
 // Functie declaraties
 void clear_screen();
 
@@ -39,9 +36,9 @@ void set_color(enum color fg, enum color bg);
 void reset_color();
 
 void disable_cursor();
+void enable_cursor();
 
 void kputchar(char c, enum color fg, enum color bg);
 void kprint(const char *str, ...);
 void kserial(enum color fg, enum color bg, const char *str, ...);
-
 #endif /* VGA_H */
