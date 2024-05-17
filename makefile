@@ -1,5 +1,5 @@
 CC=i686-elf-gcc
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -Iinclude
+CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra -Iinclude
 LDFLAGS= -T config/linker.ld -nostdlib
 AS=nasm
 ASFLAGS=-f elf32
@@ -31,6 +31,7 @@ kernel:
 	$(CC) -c src/isr.c -o $(BIN)/isr.o $(CFLAGS)
 	$(CC) -c src/pic.c -o $(BIN)/pic.o $(CFLAGS)
 	$(CC) -c src/io_ports.c -o $(BIN)/io_ports.o $(CFLAGS)
+	$(CC) -c src/timer.c -o $(BIN)/timer.o $(CFLAGS)
 
 
 iso:

@@ -18,6 +18,10 @@ void* memcpy(void* dest, const void* src, size_t num);
 // strstr
 char* strstr(const char* haystack, const char* needle);
 
+
+// strncmp
+int strncmp(const char* str1, const char* str2, size_t num);
+
 // is functions
 bool isEqual(const uint8_t* a, const uint8_t* b, size_t size);
 bool islower(char c);

@@ -80,6 +80,15 @@ char* strstr(const char* haystack, const char* needle) {
     return NULL;
 }
 
+int strncmp(const char* str1, const char* str2, size_t num) {
+    for (size_t i = 0; i < num; i++) {
+        if (str1[i] != str2[i]) {
+            return str1[i] - str2[i];
+        }
+    }
+    return 0;
+}
+
 bool isEqual(const uint8_t* a, const uint8_t* b, size_t size) {
     for (size_t i = 0; i < size; i++) {
         if (a[i] != b[i]) {
