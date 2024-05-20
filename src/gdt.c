@@ -35,5 +35,5 @@ void gdt_init() {
 
     load_gdt((uint32_t)&g_gdt_ptr);
 
-    kserial(GREEN, LIGHT_GREEN, " [OK] GDT initialized\n");
+    kserial(GREEN, BLACK, " [OK] GDT driver geinstalleerd\n");
 }

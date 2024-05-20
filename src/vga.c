@@ -3,7 +3,6 @@
 #include "io_ports.h"
 #include <stdarg.h>
 
-// Globale variabelen voor de huidige tekstkleuren
 enum color current_fg = WHITE;
 enum color current_bg = BLACK;
 size_t vga_index = 0;
@@ -20,6 +19,15 @@ void clear_screen() {
     vga_index = 0;
     vga_row = 0;
     vga_column = 0;
+    set_cursor(0, 0);
+}
+
+void set_cursor(int x, int y) {
+    uint16_t pos = y * SCREEN_WIDTH + x;
+    outportb(0x3D4, 0x0F);
+    outportb(0x3D5, (uint8_t) (pos & 0xFF));
+    outportb(0x3D4, 0x0E);
+    outportb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
 }
 
 void vga_entry(unsigned char c, enum color fg, enum color bg, int x, int y) {
@@ -27,6 +35,7 @@ void vga_entry(unsigned char c, enum color fg, enum color bg, int x, int y) {
 }
 
 void vga_init() {
+
     set_color(WHITE, BLACK);
     clear_screen();
 }
@@ -41,17 +50,23 @@ void reset_color() {
     current_bg = BLACK;
 }
 
-
 void disable_cursor() {
     outportb(0x3D4, 0x0A);
     outportb(0x3D5, 0x20);
+}
+
+void enable_cursor() {
+    outportb(0x3D4, 0x0A);
+    outportb(0x3D5, 0x0D);
+    outportb(0x3D4, 0x0B);
+    outportb(0x3D5, 0x0E);
 }
 
 void kputchar(char c, enum color fg, enum color bg) {
     if (c == '\n') {
         vga_column = 0;
         if (++vga_row == SCREEN_HEIGHT) {
-            vga_row = 0;
+            clear_screen();
         }
     } else if (c == '\t') {
         for (int i = 0; i < 4; i++) {
@@ -59,30 +74,37 @@ void kputchar(char c, enum color fg, enum color bg) {
             if (++vga_column == SCREEN_WIDTH) {
                 vga_column = 0;
                 if (++vga_row == SCREEN_HEIGHT) {
-                    vga_row = 0;
+                    clear_screen();
                 }
             }
         }
     } else if (c == '\b') {
         if (vga_column > 0) {
-            vga_entry(' ', fg, bg, vga_column, vga_row);
             vga_column--;
         } else if (vga_row > 0) {
-            vga_column = SCREEN_WIDTH - 1;
             vga_row--;
-            vga_entry(' ', fg, bg, vga_column, vga_row);
+            vga_column = SCREEN_WIDTH - 1;
         }
+        vga_entry(' ', fg, bg, vga_column, vga_row);
     } else if (c == '\r') {
         vga_column = 0;
     } else {
+        if (vga_column == SCREEN_WIDTH) {
+            vga_column = 0;
+            if (++vga_row == SCREEN_HEIGHT) {
+                clear_screen();
+            }
+        }
         vga_entry(c, fg, bg, vga_column, vga_row);
         if (++vga_column == SCREEN_WIDTH) {
             vga_column = 0;
-            if (++vga_row == SCREEN_HEIGHT) {
-                vga_row = 0;
+            if (vga_row == SCREEN_HEIGHT) {
+                clear_screen();
             }
         }
     }
+
+    set_cursor(vga_column, vga_row);
 }
 
 
@@ -131,7 +153,6 @@ void kprint(const char *str, ...) {
 
     va_end(args);
 }
-
 
 void kserial(enum color fg, enum color bg, const char *str, ...) {
     va_list args;

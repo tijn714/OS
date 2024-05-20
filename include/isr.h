@@ -19,30 +19,12 @@ typedef struct {
 // ISR function prototype
 typedef void (*ISR)(REGISTERS *);
 
-/**
- * register given handler to interrupt handlers at given num
- */
 void isr_register_interrupt_handler(int num, ISR handler);
-
-/*
- * turn off current interrupt
-*/
 void isr_end_interrupt(int num);
-
-/**
- * invoke exception routine,
- * being called in exception.asm
- */
 void isr_exception_handler(REGISTERS reg);
 
-/**
- * invoke isr routine and send eoi to pic,
- * being called in irq.asm
- */
 void isr_irq_handler(REGISTERS *reg);
 
-
-// defined in exception.asm
 extern void exception_0();
 extern void exception_1();
 extern void exception_2();
@@ -77,7 +59,6 @@ extern void exception_30();
 extern void exception_31();
 extern void exception_128();
 
-// defined in irq.asm
 extern void irq_0();
 extern void irq_1();
 extern void irq_2();

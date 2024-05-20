@@ -18,11 +18,22 @@ void* memcpy(void* dest, const void* src, size_t num);
 // strstr
 char* strstr(const char* haystack, const char* needle);
 
+// strncmp
+int strncmp(const char* str1, const char* str2, size_t num);
+
+// strcmp
+int strcmp(const char* str1, const char* str2);
+
 // is functions
 bool isEqual(const uint8_t* a, const uint8_t* b, size_t size);
-bool islower(char c);
-bool isupper(char c);
 bool isint(char c);
-bool isdigit(char c);
+
+int isspace(char c);
+
+int isalpha(char c);
+char upper(char c);
+char lower(char c);
+
+void clear_buffer(char* buffer, int size);
 
 #endif /* MEMORY_H */

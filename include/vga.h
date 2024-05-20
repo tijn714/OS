@@ -28,6 +28,13 @@ enum color {
 #define SCREEN_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT)
 
 
+extern enum color current_bg;
+extern enum color current_fg;
+extern size_t vga_index;
+extern size_t vga_row;
+extern size_t vga_column;
+
+
 #define VGA_MEMORY 0xB8000
 
 // Functie declaraties
@@ -39,6 +46,10 @@ void set_color(enum color fg, enum color bg);
 void reset_color();
 
 void disable_cursor();
+void enable_cursor();
+
+
+void set_cursor(int x, int y);
 
 void kputchar(char c, enum color fg, enum color bg);
 void kprint(const char *str, ...);

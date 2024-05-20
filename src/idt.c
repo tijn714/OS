@@ -74,5 +74,5 @@ void idt_init() {
     load_idt((uint32_t)&g_idt_ptr);
     asm volatile("sti");
 
-    kserial(GREEN, LIGHT_GREEN, " [OK] IDT initialized\n");
+    kserial(GREEN, BLACK, " [OK] IDT driver geinstalleerd\n");
 }

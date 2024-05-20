@@ -1,5 +1,5 @@
 CC=i686-elf-gcc
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -Iinclude
+CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra -Iinclude
 LDFLAGS= -T config/linker.ld -nostdlib
 AS=nasm
 ASFLAGS=-f elf32
@@ -12,6 +12,10 @@ default:
 	$(MAKE) kernel
 	$(MAKE) link
 	
+dist:
+	$(MAKE) 
+	$(MAKE) iso
+	$(MAKE) cleanup
 	
 bootstrap:
 	@mkdir -p $(BIN)
@@ -31,7 +35,13 @@ kernel:
 	$(CC) -c src/isr.c -o $(BIN)/isr.o $(CFLAGS)
 	$(CC) -c src/pic.c -o $(BIN)/pic.o $(CFLAGS)
 	$(CC) -c src/io_ports.c -o $(BIN)/io_ports.o $(CFLAGS)
+	$(CC) -c src/timer.c -o $(BIN)/timer.o $(CFLAGS)
+	$(CC) -c src/keyboard.c -o $(BIN)/keyboard.o $(CFLAGS)
+	$(CC) -c src/aes.c -o $(BIN)/aes.o $(CFLAGS)
 
+
+# font: // OBSOLETE FOR NOW
+# 	i686-elf-objcopy -B i386 -I binary font/light-vga16.psf font/font.o
 
 iso:
 	mkdir -p $(BIN)/isodir/boot/grub
@@ -49,6 +59,13 @@ clean:
 	rm -rf $(BIN)
 	rm -rf *.bin
 	rm -rf *.iso
+	rm -rf font/*.o
+
+
+cleanup:
+	rm -rf $(BIN)
+	rm -rf *.bin
+	rm -rf font/*.o
 
 run: bootstrap kernel link iso
 	qemu-system-i386 -cdrom $(TARGET).iso
