@@ -10,8 +10,9 @@ uint8_t inportb(uint16_t port);
 void outportb(uint16_t port, uint8_t data);
 
 
-// in_byte and out_byte are the same as inportb and outportb
-#define in_byte inportb
-#define out_byte outportb
+// outportw
+void outportw(uint16_t port, uint16_t data);
 
+// inportw
+uint16_t inportw(uint16_t port);
 #endif // IO_PORTS_H

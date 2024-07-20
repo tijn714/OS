@@ -26,6 +26,9 @@ typedef struct {
 } DATE_TIME;
 
 
+extern uint32_t u_ticks;
+
+
 // define the range of each field in date and time
 #define MAX_SECOND    59
 #define MAX_MINUTE    59
@@ -50,7 +53,5 @@ typedef struct {
 void timer_init();
 void sleep(int sec);
 void timer_register_function(TIMER_FUNCTION function, TIMER_FUNC_ARGS *args);
-void print_sys_uptime();
-void get_date_time(DATE_TIME *dt);
 
 #endif

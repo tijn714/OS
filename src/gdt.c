@@ -1,5 +1,4 @@
 #include "gdt.h"
-#include "vga.h"
 
 GDT g_gdt[NO_GDT_DESCRIPTORS];
 GDT_PTR g_gdt_ptr;
@@ -34,6 +33,4 @@ void gdt_init() {
     gdt_set_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
     load_gdt((uint32_t)&g_gdt_ptr);
-
-    kserial(GREEN, LIGHT_GREEN, " [OK] GDT initialized\n");
 }

@@ -12,6 +12,10 @@ default:
 	$(MAKE) kernel
 	$(MAKE) link
 	
+dist:
+	$(MAKE) 
+	$(MAKE) iso
+	$(MAKE) cleanup
 	
 bootstrap:
 	@mkdir -p $(BIN)
@@ -32,7 +36,12 @@ kernel:
 	$(CC) -c src/pic.c -o $(BIN)/pic.o $(CFLAGS)
 	$(CC) -c src/io_ports.c -o $(BIN)/io_ports.o $(CFLAGS)
 	$(CC) -c src/timer.c -o $(BIN)/timer.o $(CFLAGS)
+	$(CC) -c src/keyboard.c -o $(BIN)/keyboard.o $(CFLAGS)
+	$(CC) -c src/cpu.c -o $(BIN)/cpu.o $(CFLAGS)
 
+
+font:
+	xxd -i font/prefs.psf > font/font.h
 
 iso:
 	mkdir -p $(BIN)/isodir/boot/grub
@@ -50,6 +59,13 @@ clean:
 	rm -rf $(BIN)
 	rm -rf *.bin
 	rm -rf *.iso
+	rm -rf font/*.o
+
+
+cleanup:
+	rm -rf $(BIN)
+	rm -rf *.bin
+	rm -rf font/*.o
 
 run: bootstrap kernel link iso
-	qemu-system-i386 -cdrom $(TARGET).iso
+	qemu-system-i386 -rtc base=localtime -vga std -drive file=$(TARGET).iso,media=cdrom -boot d

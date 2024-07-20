@@ -35,8 +35,6 @@ _stublet:
 	call kmain
 	jmp $
 
-
-
 ; GDT
 global load_gdt
 load_gdt:
@@ -380,6 +378,7 @@ IRQ 12, 44
 IRQ 13, 45
 IRQ 14, 46
 IRQ 15, 47
+
 
 section .bss
 	resb 8192	; 8MB Memory Reserved

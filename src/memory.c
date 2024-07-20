@@ -1,4 +1,5 @@
 #include "memory.h"
+#include <stdarg.h>
 
 size_t strlen(const char* str) {
     size_t len = 0;
@@ -89,6 +90,23 @@ int strncmp(const char* str1, const char* str2, size_t num) {
     return 0;
 }
 
+int strcmp(const char* str1, const char* str2) {
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    if (len1 != len2) {
+        return len1 - len2;
+    }
+    return strncmp(str1, str2, len1);
+}
+
+int atoi(const char* str) {
+    int res = 0;
+    for (size_t i = 0; str[i] != '\0'; i++) {
+        res = res * 10 + str[i] - '0';
+    }
+    return res;
+}
+
 bool isEqual(const uint8_t* a, const uint8_t* b, size_t size) {
     for (size_t i = 0; i < size; i++) {
         if (a[i] != b[i]) {
@@ -98,18 +116,43 @@ bool isEqual(const uint8_t* a, const uint8_t* b, size_t size) {
     return true;
 }
 
-bool islower(char c) {
-    return c >= 'a' && c <= 'z';
-}
-
-bool isupper(char c) {
-    return c >= 'A' && c <= 'Z';
-}
-
 bool isint(char c) {
     return c >= '0' && c <= '9';
 }
 
-bool isdigit(char c) {
-    return c >= '0' && c <= '9';
+int isspace(char c) {
+    return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r';
+}
+
+int isalpha(char c) {
+    return (((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')));
+}
+
+char upper(char c) {
+    if ((c >= 'a') && (c <= 'z'))
+        return (c - 32);
+    return c;
+}
+
+char lower(char c) {
+    if ((c >= 'A') && (c <= 'Z'))
+        return (c + 32);
+    return c;
+}
+
+bool isEmpty(char* buffer) {
+    return buffer[0] == '\0';
+}
+
+void clear_buffer(char *buffer) {
+    // get the length of the buffer
+    int len = strlen(buffer);
+
+    // set the last character to null
+    buffer[len - 1] = '\0';
+
+    // set the rest of the buffer to null
+    for (int i = 0; i < len; i++) {
+        buffer[i] = '\0';
+    }
 }
