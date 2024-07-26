@@ -34,6 +34,6 @@ int isalpha(char c);
 char upper(char c);
 char lower(char c);
 
-void clear_buffer(char* buffer, int size);
+void clear_buffer(char* buffer);
 
 #endif /* MEMORY_H */
