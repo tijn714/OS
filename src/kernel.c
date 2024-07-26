@@ -218,6 +218,6 @@ void kmain(void) {
         else {
             kserial(RED, BLACK, " commando '%s' niet gevonden.\n", buffer);
         }
-        clear_buffer(buffer, 256);
+        clear_buffer(buffer);
     }
 } 
