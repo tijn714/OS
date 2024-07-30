@@ -123,8 +123,6 @@ void keyboard_handler(REGISTERS *r) {
 
 void keyboard_init() {
     isr_register_interrupt_handler(IRQ_BASE + 1, keyboard_handler);
-
-    kserial(GREEN, BLACK, " [OK] Toetsenboord driver geinstalleerd\n");
 }
 
 // a blocking character read

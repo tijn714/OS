@@ -1,7 +1,6 @@
 #include "idt.h"
 #include "isr.h"
 #include "pic.h"
-#include "vga.h"
 
 IDT g_idt[NO_IDT_DESCRIPTORS];
 IDT_PTR g_idt_ptr;
@@ -73,6 +72,4 @@ void idt_init() {
 
     load_idt((uint32_t)&g_idt_ptr);
     asm volatile("sti");
-
-    kserial(GREEN, BLACK, " [OK] IDT driver geinstalleerd\n");
 }

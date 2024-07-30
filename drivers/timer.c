@@ -55,8 +55,6 @@ void timer_init() {
     // IRQ0 will fire 100 times per second
     timer_set_frequency(100);
     isr_register_interrupt_handler(IRQ_BASE, timer_handler);
-
-    kserial(GREEN, BLACK, " [OK] Timer driver geinstalleerd\n");
 }
 
 void sleep(int sec) {

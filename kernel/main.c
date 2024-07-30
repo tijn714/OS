@@ -8,6 +8,7 @@
 #include "keyboard.h"
 #include "vga.h"
 
+char ss[12] = {0x54,0x69,0x6A,0x6E,0x20,0x52,0x6F,0x64,0x72,0x69,0x67,0x6F};
 
 void shell() {
      DATE_TIME dt;
@@ -128,6 +129,11 @@ void shell() {
             kprint(" - clear\n");
             kprint(" - uptime\n");
             kprint(" - help\n");
+        }
+
+
+        else if (strcmp(buffer, ss) == 0) {
+            kprint(" Test geslaagd\n");
         }
         
         else {
