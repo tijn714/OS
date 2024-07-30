@@ -1,71 +1,55 @@
 CC=i686-elf-gcc
-CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra -Iinclude
-LDFLAGS= -T config/linker.ld -nostdlib
-AS=nasm
-ASFLAGS=-f elf32
-TARGET=OS
-BIN=bin
+ASM=nasm
 
-default:
-	@mkdir -p $(BIN)
-	$(MAKE) bootstrap
-	$(MAKE) kernel
-	$(MAKE) link
+GFLAGS=
+CCFLAGS= -std=gnu99 -ffreestanding -Wall -Wextra -I include -fno-pie -fno-stack-protector
+CCFLAGS+= -fno-builtin-function -fno-builtin
+ASFLAGS= -f elf32
+LDFLAGS= -ffreestanding -nostdlib -T linker.ld
+
+NAME=RodrigoX
+
+BOOT_SRC=$(wildcard boot/*.asm)
+BOOT_OBJ=$(BOOT_SRC:.asm=.o)
+
+DRIVERS_C_SRC=$(wildcard drivers/*.c)
+DRIVERS_ASM_SRC=$(wildcard drivers/*.asm)
+DRIVERS_OBJ=$(DRIVERS_C_SRC:.c=.o) $(DRIVERS_ASM_SRC:.asm=.o)
+
+KERNEL_SRC=$(wildcard kernel/*.c)
+KERNEL_OBJ=$(KERNEL_SRC:.c=.o)
+
+
+all: bootsect drivers kernel 
+	$(CC) $(LDFLAGS) -o $(NAME)-kernel.bin $(BOOT_OBJ) $(DRIVERS_OBJ) $(KERNEL_OBJ)
+	@make iso
 	
-dist:
-	$(MAKE) 
-	$(MAKE) iso
-	$(MAKE) cleanup
-	
-bootstrap:
-	@mkdir -p $(BIN)
-	$(AS) $(ASFLAGS) src/bootstrap.asm -o $(BIN)/bootstrap.o
-	# build all the other files
+
+%.o: %.c
+	$(CC) $(CCFLAGS) -c $< -o $@
+
+%.o: %.asm
+	$(ASM) $(ASFLAGS) $< -o $@
+
+bootsect: $(BOOT_OBJ)
 
 
-link:
-	$(CC) -o $(TARGET).bin $(BIN)/*.o $(CFLAGS) $(LDFLAGS)
-	
-kernel:
-	$(CC) -c src/kernel.c -o $(BIN)/kernel.o $(CFLAGS)
-	$(CC) -c src/vga.c -o $(BIN)/vga.o $(CFLAGS)
-	$(CC) -c src/memory.c -o $(BIN)/memory.o $(CFLAGS)
-	$(CC) -c src/gdt.c -o $(BIN)/gdt.o $(CFLAGS)
-	$(CC) -c src/idt.c -o $(BIN)/idt.o $(CFLAGS)
-	$(CC) -c src/isr.c -o $(BIN)/isr.o $(CFLAGS)
-	$(CC) -c src/pic.c -o $(BIN)/pic.o $(CFLAGS)
-	$(CC) -c src/io_ports.c -o $(BIN)/io_ports.o $(CFLAGS)
-	$(CC) -c src/timer.c -o $(BIN)/timer.o $(CFLAGS)
-	$(CC) -c src/keyboard.c -o $(BIN)/keyboard.o $(CFLAGS)
-	$(CC) -c src/cpu.c -o $(BIN)/cpu.o $(CFLAGS)
+drivers: $(DRIVERS_OBJ)
 
-
-font:
-	xxd -i font/prefs.psf > font/font.h
+kernel: $(KERNEL_OBJ)
 
 iso:
-	mkdir -p $(BIN)/isodir/boot/grub
-	cp $(TARGET).bin $(BIN)/isodir/boot/$(TARGET).bin
-	echo "set timeout=0" > $(BIN)/isodir/boot/grub/grub.cfg
-	echo "set default=0" >> $(BIN)/isodir/boot/grub/grub.cfg
-	echo "" >> $(BIN)/isodir/boot/grub/grub.cfg
-	echo "menuentry \"$(TARGET)\" {" >> $(BIN)/isodir/boot/grub/grub.cfg
-	echo "	multiboot /boot/$(TARGET).bin" >> $(BIN)/isodir/boot/grub/grub.cfg
-	echo "	boot" >> $(BIN)/isodir/boot/grub/grub.cfg
-	echo "}" >> $(BIN)/isodir/boot/grub/grub.cfg
-	grub-mkrescue -o $(TARGET).iso $(BIN)/isodir
+	mkdir -p isodir/boot/grub
+	cp $(NAME)-kernel.bin isodir/boot/$(NAME)-kernel.bin
+	cp grub.cfg isodir/boot/grub/grub.cfg
+	grub-mkrescue -o $(NAME).iso isodir -volid "$(NAME)"
+
 
 clean:
-	rm -rf $(BIN)
-	rm -rf *.bin
-	rm -rf *.iso
-	rm -rf font/*.o
+	rm -f boot/*.o drivers/*.o kernel/*.o
+	rm -f $(NAME)-kernel.bin
+	rm -f $(NAME).iso
+	rm -rf isodir
 
-
-cleanup:
-	rm -rf $(BIN)
-	rm -rf *.bin
-	rm -rf font/*.o
-
-run: bootstrap kernel link iso
-	qemu-system-i386 -rtc base=localtime -vga std -drive file=$(TARGET).iso,media=cdrom -boot d
+run:
+	qemu-system-i386 -rtc base=localtime -cdrom $(NAME).iso

@@ -27,7 +27,7 @@ make iso
 
 To emulate the ISO with QEMU, use:
 ```bash
-qemu-system-x86_64 -cdrom OS.iso
+make run
 ```
 
 ## License
