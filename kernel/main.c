@@ -82,7 +82,7 @@ void shell() {
     char buffer[256];
 
     while(1) {
-        kprint(" shell@OS~# ");
+        kprint(" shell@RodrigoX~# ");
         kb_getinput(buffer, 256);
 
         kprint("\n");
