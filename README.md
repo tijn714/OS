@@ -1,35 +1,5 @@
-# OS Development Journey
+# project moved
 
-Welcome to my OS development journey! This project is an exploration into the intricate world of operating system development. Below you'll find information about the project, including its current status, requirements, and how to build and run the project. 
+**This repo will not be updated anymore please visit the repo below:
 
-## Requirements
-
-To build and run the OS, you'll need the following tools installed:
-
-- `i686-elf-gcc`
-- `nasm`
-- `make`
-- ```grub-mkrescue``` (to build the ISO image)
-- QEMU
-
-## Building and Running
-
-To build the kernel use
-
-```bash
-make
-```
-
-To build the ISO image, use the following command:
-```bash
-make iso
-```
-
-To emulate the ISO with QEMU, use:
-```bash
-make run
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+https://github.com/tijn714/RodrigoX
